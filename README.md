@@ -37,6 +37,79 @@ For each problem, think about three questions:
 
 ---
 
+# 📈 Practice Progress
+
+## Beginner Level — Current Progress
+
+| Question | Topic                                 | Status         |
+| -------: | ------------------------------------- | -------------- |
+|       01 | `ROW_NUMBER()` with `ORDER BY`        | ✅ Completed   |
+|       02 | `ROW_NUMBER()` with salary descending | ✅ Completed   |
+|       03 | `AVG() OVER()`                        | ⬜ Not started |
+|       04 | `MAX() OVER()`                        | ⬜ Not started |
+|       05 | `MIN() OVER()`                        | ⬜ Not started |
+|       06 | `ROW_NUMBER()` + `PARTITION BY`       | ⬜ Not started |
+|       07 | `RANK()` + `PARTITION BY`             | ⬜ Not started |
+|       08 | `ROW_NUMBER()` + `PARTITION BY`       | ⬜ Not started |
+|       09 | `AVG()` + `PARTITION BY`              | ⬜ Not started |
+|       10 | `SUM()` + `PARTITION BY`              | ⬜ Not started |
+|    11–17 | Ranking functions                     | ⬜ Not started |
+|    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
+|    25–29 | Running calculations                  | ⬜ Not started |
+|       30 | Multiple window functions             | ⬜ Not started |
+
+### Completed Questions
+
+#### ✅ Question 1 — Number Every Order
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    ORDER BY order_date, order_id
+) AS order_row
+```
+
+The query assigns a sequential number to every order based on chronological order.
+
+#### ✅ Question 2 — Number Employees by Salary
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    ORDER BY salary DESC
+) AS salary_row_number
+```
+
+The query assigns a sequential number to employees from the highest salary to the lowest salary.
+
+### Important Learning Point from Q1–Q2
+
+The first two exercises establish an important distinction:
+
+```sql
+ROW_NUMBER() OVER (
+    ORDER BY salary DESC
+)
+```
+
+The `ORDER BY` **inside `OVER()`** determines how the window function calculates the row number.
+
+A separate query-level:
+
+```sql
+ORDER BY ...
+```
+
+controls the final display order of the result set.
+
+These are not the same thing.
+
+---
+
+---
+
 # 🛠️ Technologies
 
 - SQL Server
@@ -1249,11 +1322,17 @@ Therefore, rerunning the script will recreate the practice tables and regenerate
 USE WindowFunctionsPracticeDB;
 ```
 
-Then begin with:
+Current progress:
 
 ```text
 01 → 02 → 03 → ... → 30
+     ↑
+   DONE
 ```
+
+**Completed: 2 / 30 beginner questions**
+
+Continue with **Question 3 — Employee Salary vs Company Average**.
 
 Try to solve every question yourself before checking a solution.
 
