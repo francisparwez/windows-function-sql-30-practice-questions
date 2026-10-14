@@ -93,8 +93,7 @@ FROM products;
 -- Concept: MIN() OVER()
 
 SELECT
-	product_name,
-	price,
-	MIN(price) OVER() AS minimum_price
-FROM
-	products;
+    product_name,
+    price,
+    MIN(price) OVER () AS minimum_price
+FROM products;

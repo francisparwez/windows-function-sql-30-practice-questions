@@ -45,11 +45,11 @@ For each problem, think about three questions:
 | -------: | ------------------------------------- | -------------- |
 |       01 | `ROW_NUMBER()` with `ORDER BY`        | ✅ Completed   |
 |       02 | `ROW_NUMBER()` with salary descending | ✅ Completed   |
-|       03 | `AVG() OVER()`                        | ⬜ Not started |
-|       04 | `MAX() OVER()`                        | ⬜ Not started |
-|       05 | `MIN() OVER()`                        | ⬜ Not started |
-|       06 | `ROW_NUMBER()` + `PARTITION BY`       | ⬜ Not started |
-|       07 | `RANK()` + `PARTITION BY`             | ⬜ Not started |
+|       03 | `AVG() OVER()`                        | ✅ Completed   |
+|       04 | `MAX() OVER()`                        | ✅ Completed   |
+|       05 | `MIN() OVER()`                        | ✅ Completed   |
+|       06 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
+|       07 | `RANK()` + `PARTITION BY`             | ✅ Completed   |
 |       08 | `ROW_NUMBER()` + `PARTITION BY`       | ⬜ Not started |
 |       09 | `AVG()` + `PARTITION BY`              | ⬜ Not started |
 |       10 | `SUM()` + `PARTITION BY`              | ⬜ Not started |
@@ -105,6 +105,68 @@ ORDER BY ...
 controls the final display order of the result set.
 
 These are not the same thing.
+
+#### ✅ Question 3 — Employee Salary vs Company Average
+
+Used:
+
+```sql
+CAST(AVG(salary) OVER() AS DECIMAL(10,2)) AS company_average_salary
+```
+
+`AVG(salary) OVER()` calculates the average salary across the whole company while keeping every employee row in the result. The `CAST` formats the average to two decimal places.
+
+#### ✅ Question 4 — Product Price vs Maximum Price
+
+Used:
+
+```sql
+MAX(price) OVER() AS maximum_price
+```
+
+This returns each product's price alongside the highest price in the entire catalog, without collapsing the product rows.
+
+#### ✅ Question 5 — Product Price vs Minimum Price
+
+Used:
+
+```sql
+MIN(price) OVER() AS minimum_price
+```
+
+This returns each product's price alongside the lowest price in the entire catalog, while keeping every product row.
+
+### Important Learning Point from Q3–Q5
+
+`AVG() OVER()`, `MAX() OVER()`, and `MIN() OVER()` are windowed aggregate calculations. Without `PARTITION BY`, each calculation operates over the full set of rows.
+
+#### ✅ Question 6 — Number Orders for Each Customer
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    PARTITION BY customer_id
+    ORDER BY order_date, order_id
+) AS customer_order_number
+```
+
+`PARTITION BY customer_id` restarts the sequence for each customer. Ordering by both `order_date` and `order_id` gives a stable sequence when multiple orders share the same date.
+
+#### ✅ Question 7 — Rank Employees Within Each Department
+
+Used:
+
+```sql
+RANK() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+) AS rnk
+```
+
+The ranking restarts for each department, with the highest salary ranked first. The query uses a subquery to calculate each rank and then filters to `rnk = 1`, returning the highest-paid employee or employees in each department. Ties for the highest salary are preserved.
+
+This exercise was solved using a **subquery rather than a CTE**. A CTE would also be valid, but the subquery keeps the same two-stage logic: calculate the rank, then filter it.
 
 ---
 
@@ -1325,14 +1387,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → ... → 30
-     ↑
-   DONE
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → ... → 30
+                         ↑
+                       NEXT
 ```
 
-**Completed: 2 / 30 beginner questions**
+**Completed: 7 / 30 beginner questions**
 
-Continue with **Question 3 — Employee Salary vs Company Average**.
+Continue with **Question 8 — Number Products Within Each Category**.
 
 Try to solve every question yourself before checking a solution.
 
