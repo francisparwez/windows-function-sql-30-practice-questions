@@ -115,3 +115,26 @@ SELECT
         ) AS DECIMAL(10, 2)
     ) AS moving_average_salary
 FROM employees;
+
+-- 10. Total Sales by Customer
+-- Scenario:
+-- A business wants to see each order while also showing how much the customer has spent in
+-- total.
+-- Task:
+-- Return:
+--     customer_id
+--     order_id
+--     order_amount
+--     customer_total_spending
+-- Concept: SUM() OVER(PARTITION BY ...)
+
+SELECT
+    c.customer_id,
+    o.order_id,
+    o.amount AS order_amount,
+    SUM(o.amount) OVER (
+        PARTITION BY
+            c.customer_id
+    ) AS customer_total_spending
+FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id;

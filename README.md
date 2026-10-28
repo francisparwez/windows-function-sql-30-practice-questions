@@ -52,7 +52,7 @@ For each problem, think about three questions:
 |       07 | `RANK()` + `PARTITION BY`             | ✅ Completed   |
 |       08 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
 |       09 | `AVG()` + `PARTITION BY`              | ✅ Completed   |
-|       10 | `SUM()` + `PARTITION BY`              | ⬜ Not started |
+|       10 | `SUM()` + `PARTITION BY`              | ✅ Completed   |
 |    11–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
 |    25–29 | Running calculations                  | ⬜ Not started |
@@ -194,6 +194,18 @@ CAST(
 ```
 
 The query displays each employee's salary alongside their department's average salary. `PARTITION BY department` calculates a separate average for each department while retaining every employee row.
+
+#### ✅ Question 10 — Total Sales by Customer
+
+Used:
+
+```sql
+SUM(amount) OVER (
+    PARTITION BY customer_id
+) AS customer_total_spending
+```
+
+The query returns each order alongside the total amount spent by that customer across all their orders. `PARTITION BY customer_id` calculates a separate total for each customer, while the window function preserves individual order rows. The query joins `customers` to `orders` using `customer_id`.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1428,14 +1440,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → ... → 30
-                                   ↑
-                                 NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → ... → 30
+                                               ↑
+                                             NEXT
 ```
 
-**Completed: 9 / 30 beginner questions**
+**Completed: 10 / 30 beginner questions**
 
-Continue with **Question 10 — Total Sales by Customer**.
+Continue with **Question 11 — Highest-Paid Employee**.
 
 Try to solve every question yourself before checking a solution.
 
