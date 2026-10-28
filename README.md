@@ -50,8 +50,8 @@ For each problem, think about three questions:
 |       05 | `MIN() OVER()`                        | ✅ Completed   |
 |       06 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
 |       07 | `RANK()` + `PARTITION BY`             | ✅ Completed   |
-|       08 | `ROW_NUMBER()` + `PARTITION BY`       | ⬜ Not started |
-|       09 | `AVG()` + `PARTITION BY`              | ⬜ Not started |
+|       08 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
+|       09 | `AVG()` + `PARTITION BY`              | ✅ Completed   |
 |       10 | `SUM()` + `PARTITION BY`              | ⬜ Not started |
 |    11–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
@@ -167,6 +167,47 @@ RANK() OVER (
 The ranking restarts for each department, with the highest salary ranked first. The query uses a subquery to calculate each rank and then filters to `rnk = 1`, returning the highest-paid employee or employees in each department. Ties for the highest salary are preserved.
 
 This exercise was solved using a **subquery rather than a CTE**. A CTE would also be valid, but the subquery keeps the same two-stage logic: calculate the rank, then filter it.
+
+#### ✅ Question 8 — Number Products Within Each Category
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    PARTITION BY category
+    ORDER BY price DESC
+) AS product_rank_within_category
+```
+
+The query numbers products from most expensive to least expensive, restarting the sequence for each category.
+
+#### ✅ Question 9 — Average Salary by Department
+
+Used:
+
+```sql
+CAST(
+    AVG(salary) OVER (
+        PARTITION BY department
+    ) AS DECIMAL(10,2)
+) AS department_average_salary
+```
+
+The query displays each employee's salary alongside their department's average salary. `PARTITION BY department` calculates a separate average for each department while retaining every employee row.
+
+### Additional Practice — Moving Average (Outside the 30 Questions)
+
+An extra query was added to calculate a moving average of salary within each department:
+
+```sql
+AVG(salary) OVER (
+    PARTITION BY department
+    ORDER BY hire_date, employee_id
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+)
+```
+
+This calculates the average over up to three employees in each department, ordered by hire date and employee ID. The first and second rows in each department use the available one or two rows; later rows use the current employee and the two preceding employees. This is an additional learning exercise, not one of the numbered beginner questions.
 
 ---
 
@@ -1387,14 +1428,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → ... → 30
-                         ↑
-                       NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → ... → 30
+                                   ↑
+                                 NEXT
 ```
 
-**Completed: 7 / 30 beginner questions**
+**Completed: 9 / 30 beginner questions**
 
-Continue with **Question 8 — Number Products Within Each Category**.
+Continue with **Question 10 — Total Sales by Customer**.
 
 Try to solve every question yourself before checking a solution.
 
