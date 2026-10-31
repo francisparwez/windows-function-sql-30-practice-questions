@@ -53,7 +53,9 @@ For each problem, think about three questions:
 |       08 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
 |       09 | `AVG()` + `PARTITION BY`              | ✅ Completed   |
 |       10 | `SUM()` + `PARTITION BY`              | ✅ Completed   |
-|    11–17 | Ranking functions                     | ⬜ Not started |
+|       11 | `ROW_NUMBER()`                        | ✅ Completed   |
+|       12 | `ROW_NUMBER()`                        | ✅ Completed   |
+|    13–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
 |    25–29 | Running calculations                  | ⬜ Not started |
 |       30 | Multiple window functions             | ⬜ Not started |
@@ -206,6 +208,30 @@ SUM(amount) OVER (
 ```
 
 The query returns each order alongside the total amount spent by that customer across all their orders. `PARTITION BY customer_id` calculates a separate total for each customer, while the window function preserves individual order rows. The query joins `customers` to `orders` using `customer_id`.
+
+#### ✅ Question 11 — Find the Highest-Paid Employee
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    ORDER BY salary DESC
+) AS salary_rank
+```
+
+The query uses a CTE named `RankedEmployees` to assign a sequential row number to employees from highest salary to lowest salary. The outer query filters to `salary_rank = 1` to return the highest-paid employee.
+
+#### ✅ Question 12 — Find the Top 3 Highest-Paid Employees
+
+Used:
+
+```sql
+ROW_NUMBER() OVER (
+    ORDER BY salary DESC
+) AS salary_rank
+```
+
+The query uses a CTE to rank employees by salary in descending order. Filtering with `salary_rank <= 3` returns the three employees assigned the first three row numbers.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1440,14 +1466,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → ... → 30
-                                               ↑
-                                             NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → ... → 30
+                                                         ↑
+                                                       NEXT
 ```
 
-**Completed: 10 / 30 beginner questions**
+**Completed: 12 / 30 beginner questions**
 
-Continue with **Question 11 — Highest-Paid Employee**.
+Continue with **Question 13 — Rank Products by Sales**.
 
 Try to solve every question yourself before checking a solution.
 
