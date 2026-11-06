@@ -55,7 +55,8 @@ For each problem, think about three questions:
 |       10 | `SUM()` + `PARTITION BY`              | ✅ Completed   |
 |       11 | `ROW_NUMBER()`                        | ✅ Completed   |
 |       12 | `ROW_NUMBER()`                        | ✅ Completed   |
-|    13–17 | Ranking functions                     | ⬜ Not started |
+|       13 | `RANK()`                              | ✅ Completed   |
+|    14–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
 |    25–29 | Running calculations                  | ⬜ Not started |
 |       30 | Multiple window functions             | ⬜ Not started |
@@ -232,6 +233,18 @@ ROW_NUMBER() OVER (
 ```
 
 The query uses a CTE to rank employees by salary in descending order. Filtering with `salary_rank <= 3` returns the three employees assigned the first three row numbers.
+
+#### ✅ Question 13 — Rank Products by Sales
+
+Used:
+
+```sql
+RANK() OVER (
+    ORDER BY total_sales DESC
+) AS sales_rank
+```
+
+The query uses a `ProductSales` CTE to join `orders` with `products` and calculate each product's total sales using `SUM(o.amount)`. A second CTE, `RankedProducts`, applies `RANK()` to the aggregated sales, assigning the highest-selling product rank 1. The final query displays every product with its total sales and ranking.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1466,14 +1479,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → ... → 30
-                                                         ↑
-                                                       NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → ... → 30
+                                                              ↑
+                                                            NEXT
 ```
 
-**Completed: 12 / 30 beginner questions**
+**Completed: 13 / 30 beginner questions**
 
-Continue with **Question 13 — Rank Products by Sales**.
+Continue with **Question 14 — Rank Customers by Spending**.
 
 Try to solve every question yourself before checking a solution.
 
