@@ -94,3 +94,31 @@ GROUP BY
     c.customer_id,
     c.customer_name
 ORDER BY spending_rank;
+
+-- 15. Understand Tied Rankings
+-- Consider:
+--     Salary
+--     100000
+--     90000
+--     90000
+--     80000
+-- Task:
+-- Rank these salaries using:
+--     1. RANK()
+--     2. DENSE_RANK()
+-- Then observe the difference.
+-- Concept: Understanding RANK() vs DENSE_RANK()
+
+USE WindowFunctionsPracticeDB;
+GO
+
+SELECT
+    salary,
+    RANK() OVER (
+        ORDER BY salary DESC
+    ) as salary_rank,
+    DENSE_RANK() OVER (
+        ORDER BY salary DESC
+    ) as salary_dense_rank
+FROM employees
+ORDER BY salary DESC;

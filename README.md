@@ -57,7 +57,8 @@ For each problem, think about three questions:
 |       12 | `ROW_NUMBER()`                        | ✅ Completed   |
 |       13 | `RANK()`                              | ✅ Completed   |
 |       14 | `RANK()`                              | ✅ Completed   |
-|    15–17 | Ranking functions                     | ⬜ Not started |
+|       15 | `RANK()` vs `DENSE_RANK()`            | ✅ Completed   |
+|    16–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
 |    25–29 | Running calculations                  | ⬜ Not started |
 |       30 | Multiple window functions             | ⬜ Not started |
@@ -233,7 +234,7 @@ ROW_NUMBER() OVER (
 ) AS salary_rank
 ```
 
-The query uses a CTE to rank employees by salary in descending order. Filtering with `salary_rank <= 3` returns the three employees assigned the first three row numbers.
+The query uses `TOP 3` to return three employees and `ROW_NUMBER()` to assign their positions in descending salary order. The final `ORDER BY salary_rank` displays them from highest to lowest salary.
 
 #### ✅ Question 13 — Rank Products by Sales
 
@@ -245,7 +246,7 @@ RANK() OVER (
 ) AS sales_rank
 ```
 
-The query uses a `ProductSales` CTE to join `orders` with `products` and calculate each product's total sales using `SUM(o.amount)`. A second CTE, `RankedProducts`, applies `RANK()` to the aggregated sales, assigning the highest-selling product rank 1. The final query displays every product with its total sales and ranking.
+The query joins `orders` with `products`, groups by product ID and name, and calculates each product's total sales using `SUM(o.amount)`. `RANK()` then ranks products from highest to lowest total sales.
 
 #### ✅ Question 14 — Rank Customers by Spending
 
@@ -258,6 +259,21 @@ RANK() OVER (
 ```
 
 The query joins `customers` with `orders`, groups the records by customer ID and name, and calculates each customer's total spending using `SUM(o.amount)`. `RANK()` then ranks customers from highest to lowest total spending. Customers with equal spending receive the same rank.
+
+#### ✅ Question 15 — Understand Tied Rankings
+
+Used:
+
+```sql
+RANK() OVER (
+    ORDER BY salary DESC
+) AS salary_rank,
+DENSE_RANK() OVER (
+    ORDER BY salary DESC
+) AS salary_dense_rank
+```
+
+The query applies both ranking functions to employee salaries in descending order. Employees with equal salaries receive the same rank. `RANK()` leaves gaps after tied positions, while `DENSE_RANK()` assigns consecutive ranks without gaps. The final query-level `ORDER BY salary DESC` displays salaries from highest to lowest.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1492,14 +1508,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → ... → 30
-                                                                   ↑
-                                                                 NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → ... → 30
+                                                                        ↑
+                                                                      NEXT
 ```
 
-**Completed: 14 / 30 beginner questions**
+**Completed: 15 / 30 beginner questions**
 
-Continue with **Question 15 — Understand Tied Rankings**.
+Continue with **Question 16 — Rank Employees Within Departments**.
 
 Try to solve every question yourself before checking a solution.
 
