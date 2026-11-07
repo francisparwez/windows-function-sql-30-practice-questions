@@ -36,26 +36,16 @@ WHERE
 --     Rank employees by salary and return the top 3.
 -- Concept: ROW_NUMBER()
 
-WITH
-    RankedEmployees AS (
-        SELECT
-            employee_id,
-            employee_name,
-            department,
-            salary,
-            ROW_NUMBER() OVER (
-                ORDER BY salary DESC
-            ) AS salary_rank
-        FROM employees
-    )
 SELECT
-    employee_id,
+    TOP 3 employee_id,
     employee_name,
     department,
-    salary
-FROM RankedEmployees
-WHERE
-    salary_rank <= 3
+    salary,
+    ROW_NUMBER() OVER (
+        ORDER BY salary DESC
+    ) AS salary_rank
+FROM employees
+ORDER BY salary_rank;
 
 -- 13. Rank Products by Sales
 -- Scenario:
@@ -67,32 +57,40 @@ WHERE
 USE WindowFunctionsPracticeDB;
 GO
 
-WITH ProductSales AS (
-    SELECT
-        p.product_id,
-        p.product_name,
-        SUM(o.amount) AS total_sales
-    FROM dbo.orders o
-    INNER JOIN dbo.products p
-        ON o.product_id = p.product_id
-    GROUP BY
-        p.product_id,
-        p.product_name
-),
-RankedProducts AS (
-    SELECT
-        product_id,
-        product_name,
-        total_sales,
-        RANK() OVER (
-            ORDER BY total_sales DESC
-        ) AS sales_rank
-    FROM ProductSales
-)
 SELECT
-    product_id,
-    product_name,
-    total_sales,
-    sales_rank
-FROM RankedProducts
+    p.product_id,
+    p.product_name,
+    SUM(o.amount) AS total_sales,
+    RANK() OVER (
+        ORDER BY SUM(o.amount) DESC
+    ) AS sales_rank
+FROM dbo.orders o
+    INNER JOIN dbo.products p ON o.product_id = p.product_id
+GROUP BY
+    p.product_id,
+    p.product_name
 ORDER BY sales_rank;
+
+-- 14. Rank Customers by Spending
+-- Scenario:
+-- A loyalty program wants to rank customers based on their total spending.
+-- Task:
+-- Rank customers from highest spender to lowest spender.
+-- Concept: RANK()
+
+USE WindowFunctionsPracticeDB;
+GO
+
+SELECT
+    c.customer_id,
+    c.customer_name,
+    SUM(o.amount) AS total_spending,
+    RANK() OVER (
+        ORDER BY SUM(o.amount) DESC
+    ) AS spending_rank
+FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY
+    c.customer_id,
+    c.customer_name
+ORDER BY spending_rank;

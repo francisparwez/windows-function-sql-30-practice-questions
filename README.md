@@ -56,7 +56,8 @@ For each problem, think about three questions:
 |       11 | `ROW_NUMBER()`                        | ✅ Completed   |
 |       12 | `ROW_NUMBER()`                        | ✅ Completed   |
 |       13 | `RANK()`                              | ✅ Completed   |
-|    14–17 | Ranking functions                     | ⬜ Not started |
+|       14 | `RANK()`                              | ✅ Completed   |
+|    15–17 | Ranking functions                     | ⬜ Not started |
 |    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
 |    25–29 | Running calculations                  | ⬜ Not started |
 |       30 | Multiple window functions             | ⬜ Not started |
@@ -245,6 +246,18 @@ RANK() OVER (
 ```
 
 The query uses a `ProductSales` CTE to join `orders` with `products` and calculate each product's total sales using `SUM(o.amount)`. A second CTE, `RankedProducts`, applies `RANK()` to the aggregated sales, assigning the highest-selling product rank 1. The final query displays every product with its total sales and ranking.
+
+#### ✅ Question 14 — Rank Customers by Spending
+
+Used:
+
+```sql
+RANK() OVER (
+    ORDER BY SUM(o.amount) DESC
+) AS spending_rank
+```
+
+The query joins `customers` with `orders`, groups the records by customer ID and name, and calculates each customer's total spending using `SUM(o.amount)`. `RANK()` then ranks customers from highest to lowest total spending. Customers with equal spending receive the same rank.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1222,38 +1235,38 @@ ORDER BY
 
 # 📊 Practice Map
 
-| Question | Main Table(s)         | Main Concept                     |
-| -------: | --------------------- | -------------------------------- |
-|       01 | `orders`              | `ROW_NUMBER()`                   |
-|       02 | `employees`           | `ROW_NUMBER()`                   |
-|       03 | `employees`           | `AVG() OVER()`                   |
-|       04 | `products`            | `MAX() OVER()`                   |
-|       05 | `products`            | `MIN() OVER()`                   |
-|       06 | `orders`              | `ROW_NUMBER()` + `PARTITION BY`  |
-|       07 | `employees`           | `RANK()` + `PARTITION BY`        |
-|       08 | `products`            | `ROW_NUMBER()` + `PARTITION BY`  |
-|       09 | `employees`           | `AVG()` + `PARTITION BY`         |
-|       10 | `orders`              | `SUM()` + `PARTITION BY`         |
-|       11 | `employees`           | `ROW_NUMBER()`                   |
-|       12 | `employees`           | `ROW_NUMBER()`                   |
-|       13 | `orders` + `products` | `RANK()`                         |
-|       14 | `orders`              | `RANK()`                         |
-|       15 | `employees`           | `RANK()` vs `DENSE_RANK()`       |
-|       16 | `employees`           | `RANK()` + `PARTITION BY`        |
-|       17 | `employees`           | `RANK()` + `PARTITION BY`        |
-|       18 | `daily_sales`         | `LAG()`                          |
-|       19 | `daily_sales`         | `LAG()`                          |
-|       20 | `employees`           | `LAG()`                          |
-|       21 | `orders`              | `LEAD()` + `PARTITION BY`        |
-|       22 | `orders`              | `LEAD()`                         |
-|       23 | `monthly_revenue`     | `LAG()`                          |
-|       24 | `monthly_revenue`     | `LAG()`                          |
-|       25 | `daily_sales`         | Running `SUM()`                  |
-|       26 | `orders`              | Running `SUM()` + `PARTITION BY` |
-|       27 | `daily_sales`         | Running `AVG()`                  |
-|       28 | `daily_sales`         | Running `MAX()`                  |
-|       29 | `price_history`       | Running `MIN()`                  |
-|       30 | `orders`              | Multiple window functions        |
+| Question | Main Table(s)          | Main Concept                     |
+| -------: | ---------------------- | -------------------------------- |
+|       01 | `orders`               | `ROW_NUMBER()`                   |
+|       02 | `employees`            | `ROW_NUMBER()`                   |
+|       03 | `employees`            | `AVG() OVER()`                   |
+|       04 | `products`             | `MAX() OVER()`                   |
+|       05 | `products`             | `MIN() OVER()`                   |
+|       06 | `orders`               | `ROW_NUMBER()` + `PARTITION BY`  |
+|       07 | `employees`            | `RANK()` + `PARTITION BY`        |
+|       08 | `products`             | `ROW_NUMBER()` + `PARTITION BY`  |
+|       09 | `employees`            | `AVG()` + `PARTITION BY`         |
+|       10 | `orders`               | `SUM()` + `PARTITION BY`         |
+|       11 | `employees`            | `ROW_NUMBER()`                   |
+|       12 | `employees`            | `ROW_NUMBER()`                   |
+|       13 | `orders` + `products`  | `RANK()`                         |
+|       14 | `customers` + `orders` | `RANK()`                         |
+|       15 | `employees`            | `RANK()` vs `DENSE_RANK()`       |
+|       16 | `employees`            | `RANK()` + `PARTITION BY`        |
+|       17 | `employees`            | `RANK()` + `PARTITION BY`        |
+|       18 | `daily_sales`          | `LAG()`                          |
+|       19 | `daily_sales`          | `LAG()`                          |
+|       20 | `employees`            | `LAG()`                          |
+|       21 | `orders`               | `LEAD()` + `PARTITION BY`        |
+|       22 | `orders`               | `LEAD()`                         |
+|       23 | `monthly_revenue`      | `LAG()`                          |
+|       24 | `monthly_revenue`      | `LAG()`                          |
+|       25 | `daily_sales`          | Running `SUM()`                  |
+|       26 | `orders`               | Running `SUM()` + `PARTITION BY` |
+|       27 | `daily_sales`          | Running `AVG()`                  |
+|       28 | `daily_sales`          | Running `MAX()`                  |
+|       29 | `price_history`        | Running `MIN()`                  |
+|       30 | `orders`               | Multiple window functions        |
 
 ---
 
@@ -1479,14 +1492,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → ... → 30
-                                                              ↑
-                                                            NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → ... → 30
+                                                                   ↑
+                                                                 NEXT
 ```
 
-**Completed: 13 / 30 beginner questions**
+**Completed: 14 / 30 beginner questions**
 
-Continue with **Question 14 — Rank Customers by Spending**.
+Continue with **Question 15 — Understand Tied Rankings**.
 
 Try to solve every question yourself before checking a solution.
 
