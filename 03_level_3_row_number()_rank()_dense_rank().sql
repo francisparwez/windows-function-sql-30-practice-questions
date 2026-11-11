@@ -122,3 +122,38 @@ SELECT
     ) as salary_dense_rank
 FROM employees
 ORDER BY salary DESC;
+
+-- 16. Rank Employees Within Departments
+-- Scenario:
+--     Each department wants its own salary leaderboard.
+-- Task:
+--     Rank employees by salary within each department.
+-- Example:
+--     IT
+--     John 100k → 1
+--     Ali 90k → 2
+--     HR
+--     Sarah 80k → 1
+--     Emma 70k → 2
+-- Concept: RANK() + PARTITION BY
+
+USE WindowFunctionsPracticeDB;
+GO
+
+SELECT
+    department,
+    employee_id,
+    employee_name,
+    salary,
+    DENSE_RANK() OVER (
+        PARTITION BY
+            department
+        ORDER BY salary DESC
+    ) AS dept_salary_dense_rank,
+    RANK() OVER (
+        PARTITION BY
+            department
+        ORDER BY salary DESC
+    ) AS dept_salary_rank
+FROM employees
+ORDER BY department, salary DESC;
