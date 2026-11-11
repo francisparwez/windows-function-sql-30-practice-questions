@@ -41,27 +41,28 @@ For each problem, think about three questions:
 
 ## Beginner Level — Current Progress
 
-| Question | Topic                                 | Status         |
-| -------: | ------------------------------------- | -------------- |
-|       01 | `ROW_NUMBER()` with `ORDER BY`        | ✅ Completed   |
-|       02 | `ROW_NUMBER()` with salary descending | ✅ Completed   |
-|       03 | `AVG() OVER()`                        | ✅ Completed   |
-|       04 | `MAX() OVER()`                        | ✅ Completed   |
-|       05 | `MIN() OVER()`                        | ✅ Completed   |
-|       06 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
-|       07 | `RANK()` + `PARTITION BY`             | ✅ Completed   |
-|       08 | `ROW_NUMBER()` + `PARTITION BY`       | ✅ Completed   |
-|       09 | `AVG()` + `PARTITION BY`              | ✅ Completed   |
-|       10 | `SUM()` + `PARTITION BY`              | ✅ Completed   |
-|       11 | `ROW_NUMBER()`                        | ✅ Completed   |
-|       12 | `ROW_NUMBER()`                        | ✅ Completed   |
-|       13 | `RANK()`                              | ✅ Completed   |
-|       14 | `RANK()`                              | ✅ Completed   |
-|       15 | `RANK()` vs `DENSE_RANK()`            | ✅ Completed   |
-|    16–17 | Ranking functions                     | ⬜ Not started |
-|    18–24 | `LAG()` / `LEAD()`                    | ⬜ Not started |
-|    25–29 | Running calculations                  | ⬜ Not started |
-|       30 | Multiple window functions             | ⬜ Not started |
+| Question | Topic                                      | Status         |
+| -------: | ------------------------------------------ | -------------- |
+|       01 | `ROW_NUMBER()` with `ORDER BY`             | ✅ Completed   |
+|       02 | `ROW_NUMBER()` with salary descending      | ✅ Completed   |
+|       03 | `AVG() OVER()`                             | ✅ Completed   |
+|       04 | `MAX() OVER()`                             | ✅ Completed   |
+|       05 | `MIN() OVER()`                             | ✅ Completed   |
+|       06 | `ROW_NUMBER()` + `PARTITION BY`            | ✅ Completed   |
+|       07 | `RANK()` + `PARTITION BY`                  | ✅ Completed   |
+|       08 | `ROW_NUMBER()` + `PARTITION BY`            | ✅ Completed   |
+|       09 | `AVG()` + `PARTITION BY`                   | ✅ Completed   |
+|       10 | `SUM()` + `PARTITION BY`                   | ✅ Completed   |
+|       11 | `ROW_NUMBER()`                             | ✅ Completed   |
+|       12 | `ROW_NUMBER()`                             | ✅ Completed   |
+|       13 | `RANK()`                                   | ✅ Completed   |
+|       14 | `RANK()`                                   | ✅ Completed   |
+|       15 | `RANK()` vs `DENSE_RANK()`                 | ✅ Completed   |
+|       16 | `RANK()` + `DENSE_RANK()` + `PARTITION BY` | ✅ Completed   |
+|       17 | `RANK()` + `PARTITION BY`                  | ⬜ Not started |
+|    18–24 | `LAG()` / `LEAD()`                         | ⬜ Not started |
+|    25–29 | Running calculations                       | ⬜ Not started |
+|       30 | Multiple window functions                  | ⬜ Not started |
 
 ### Completed Questions
 
@@ -274,6 +275,23 @@ DENSE_RANK() OVER (
 ```
 
 The query applies both ranking functions to employee salaries in descending order. Employees with equal salaries receive the same rank. `RANK()` leaves gaps after tied positions, while `DENSE_RANK()` assigns consecutive ranks without gaps. The final query-level `ORDER BY salary DESC` displays salaries from highest to lowest.
+
+#### ✅ Question 16 — Rank Employees Within Departments
+
+Used:
+
+```sql
+DENSE_RANK() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+) AS dept_salary_dense_rank,
+RANK() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+) AS dept_salary_rank
+```
+
+The query calculates both `DENSE_RANK()` and `RANK()` for employee salaries within each department. `PARTITION BY department` restarts both rankings for every department, while `ORDER BY salary DESC` places the highest-paid employees first. Both functions assign the same rank to tied salaries; `RANK()` leaves gaps after ties, whereas `DENSE_RANK()` does not. The final query-level `ORDER BY department, salary DESC` organizes the results by department and descending salary.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1251,38 +1269,38 @@ ORDER BY
 
 # 📊 Practice Map
 
-| Question | Main Table(s)          | Main Concept                     |
-| -------: | ---------------------- | -------------------------------- |
-|       01 | `orders`               | `ROW_NUMBER()`                   |
-|       02 | `employees`            | `ROW_NUMBER()`                   |
-|       03 | `employees`            | `AVG() OVER()`                   |
-|       04 | `products`             | `MAX() OVER()`                   |
-|       05 | `products`             | `MIN() OVER()`                   |
-|       06 | `orders`               | `ROW_NUMBER()` + `PARTITION BY`  |
-|       07 | `employees`            | `RANK()` + `PARTITION BY`        |
-|       08 | `products`             | `ROW_NUMBER()` + `PARTITION BY`  |
-|       09 | `employees`            | `AVG()` + `PARTITION BY`         |
-|       10 | `orders`               | `SUM()` + `PARTITION BY`         |
-|       11 | `employees`            | `ROW_NUMBER()`                   |
-|       12 | `employees`            | `ROW_NUMBER()`                   |
-|       13 | `orders` + `products`  | `RANK()`                         |
-|       14 | `customers` + `orders` | `RANK()`                         |
-|       15 | `employees`            | `RANK()` vs `DENSE_RANK()`       |
-|       16 | `employees`            | `RANK()` + `PARTITION BY`        |
-|       17 | `employees`            | `RANK()` + `PARTITION BY`        |
-|       18 | `daily_sales`          | `LAG()`                          |
-|       19 | `daily_sales`          | `LAG()`                          |
-|       20 | `employees`            | `LAG()`                          |
-|       21 | `orders`               | `LEAD()` + `PARTITION BY`        |
-|       22 | `orders`               | `LEAD()`                         |
-|       23 | `monthly_revenue`      | `LAG()`                          |
-|       24 | `monthly_revenue`      | `LAG()`                          |
-|       25 | `daily_sales`          | Running `SUM()`                  |
-|       26 | `orders`               | Running `SUM()` + `PARTITION BY` |
-|       27 | `daily_sales`          | Running `AVG()`                  |
-|       28 | `daily_sales`          | Running `MAX()`                  |
-|       29 | `price_history`        | Running `MIN()`                  |
-|       30 | `orders`               | Multiple window functions        |
+| Question | Main Table(s)          | Main Concept                               |
+| -------: | ---------------------- | ------------------------------------------ |
+|       01 | `orders`               | `ROW_NUMBER()`                             |
+|       02 | `employees`            | `ROW_NUMBER()`                             |
+|       03 | `employees`            | `AVG() OVER()`                             |
+|       04 | `products`             | `MAX() OVER()`                             |
+|       05 | `products`             | `MIN() OVER()`                             |
+|       06 | `orders`               | `ROW_NUMBER()` + `PARTITION BY`            |
+|       07 | `employees`            | `RANK()` + `PARTITION BY`                  |
+|       08 | `products`             | `ROW_NUMBER()` + `PARTITION BY`            |
+|       09 | `employees`            | `AVG()` + `PARTITION BY`                   |
+|       10 | `orders`               | `SUM()` + `PARTITION BY`                   |
+|       11 | `employees`            | `ROW_NUMBER()`                             |
+|       12 | `employees`            | `ROW_NUMBER()`                             |
+|       13 | `orders` + `products`  | `RANK()`                                   |
+|       14 | `customers` + `orders` | `RANK()`                                   |
+|       15 | `employees`            | `RANK()` vs `DENSE_RANK()`                 |
+|       16 | `employees`            | `RANK()` + `DENSE_RANK()` + `PARTITION BY` |
+|       17 | `employees`            | `RANK()` + `PARTITION BY`                  |
+|       18 | `daily_sales`          | `LAG()`                                    |
+|       19 | `daily_sales`          | `LAG()`                                    |
+|       20 | `employees`            | `LAG()`                                    |
+|       21 | `orders`               | `LEAD()` + `PARTITION BY`                  |
+|       22 | `orders`               | `LEAD()`                                   |
+|       23 | `monthly_revenue`      | `LAG()`                                    |
+|       24 | `monthly_revenue`      | `LAG()`                                    |
+|       25 | `daily_sales`          | Running `SUM()`                            |
+|       26 | `orders`               | Running `SUM()` + `PARTITION BY`           |
+|       27 | `daily_sales`          | Running `AVG()`                            |
+|       28 | `daily_sales`          | Running `MAX()`                            |
+|       29 | `price_history`        | Running `MIN()`                            |
+|       30 | `orders`               | Multiple window functions                  |
 
 ---
 
@@ -1508,14 +1526,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → ... → 30
-                                                                        ↑
-                                                                      NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → ... → 30
+                                                                             ↑
+                                                                           NEXT
 ```
 
-**Completed: 15 / 30 beginner questions**
+**Completed: 16 / 30 beginner questions**
 
-Continue with **Question 16 — Rank Employees Within Departments**.
+Continue with **Question 17 — Highest-Paid Employee in Each Department**.
 
 Try to solve every question yourself before checking a solution.
 
