@@ -59,7 +59,7 @@ For each problem, think about three questions:
 |       14 | `RANK()`                                   | ✅ Completed   |
 |       15 | `RANK()` vs `DENSE_RANK()`                 | ✅ Completed   |
 |       16 | `RANK()` + `DENSE_RANK()` + `PARTITION BY` | ✅ Completed   |
-|       17 | `RANK()` + `PARTITION BY`                  | ⬜ Not started |
+|       17 | `DENSE_RANK()` + `PARTITION BY`            | ✅ Completed   |
 |    18–24 | `LAG()` / `LEAD()`                         | ⬜ Not started |
 |    25–29 | Running calculations                       | ⬜ Not started |
 |       30 | Multiple window functions                  | ⬜ Not started |
@@ -292,6 +292,21 @@ RANK() OVER (
 ```
 
 The query calculates both `DENSE_RANK()` and `RANK()` for employee salaries within each department. `PARTITION BY department` restarts both rankings for every department, while `ORDER BY salary DESC` places the highest-paid employees first. Both functions assign the same rank to tied salaries; `RANK()` leaves gaps after ties, whereas `DENSE_RANK()` does not. The final query-level `ORDER BY department, salary DESC` organizes the results by department and descending salary.
+
+#### ✅ Question 17 — Highest-Paid Employee in Each Department
+
+Used:
+
+```sql
+DENSE_RANK() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+) AS salary_rank
+```
+
+The query uses a subquery named `RankedEmployees` to calculate each employee's salary rank within their department. `PARTITION BY department` restarts the ranking for each department, while `ORDER BY salary DESC` places the highest salaries first. The outer query filters to `salary_rank = 1`, returning every employee tied for the highest salary in each department.
+
+This solution uses `DENSE_RANK()` rather than the suggested `RANK()`. Both functions return the same rank-1 employees, including ties, so either function is valid for this task.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1287,7 +1302,7 @@ ORDER BY
 |       14 | `customers` + `orders` | `RANK()`                                   |
 |       15 | `employees`            | `RANK()` vs `DENSE_RANK()`                 |
 |       16 | `employees`            | `RANK()` + `DENSE_RANK()` + `PARTITION BY` |
-|       17 | `employees`            | `RANK()` + `PARTITION BY`                  |
+|       17 | `employees`            | `DENSE_RANK()` + `PARTITION BY`            |
 |       18 | `daily_sales`          | `LAG()`                                    |
 |       19 | `daily_sales`          | `LAG()`                                    |
 |       20 | `employees`            | `LAG()`                                    |
@@ -1526,14 +1541,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → ... → 30
-                                                                             ↑
-                                                                           NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → ... → 30
+                                                                                  ↑
+                                                                                NEXT
 ```
 
-**Completed: 16 / 30 beginner questions**
+**Completed: 17 / 30 beginner questions**
 
-Continue with **Question 17 — Highest-Paid Employee in Each Department**.
+Continue with **Question 18 — Today's Sales vs Yesterday's Sales**.
 
 Try to solve every question yourself before checking a solution.
 

@@ -157,3 +157,31 @@ SELECT
     ) AS dept_salary_rank
 FROM employees
 ORDER BY department, salary DESC;
+
+-- 17. Find the Highest-Paid Employee in Each Department
+-- Scenario:
+-- HR wants to identify the highest-paid employee from every department.
+-- Task:
+-- Use a window function to rank employees within departments and return rank 1.
+-- Concept: RANK() + PARTITION BY
+
+USE WindowFunctionsPracticeDB;
+GO
+
+SELECT
+    employee_id,
+    employee_name,
+    department,
+    salary,
+    salary_rank
+FROM (
+        SELECT
+            employee_id, employee_name, department, salary, DENSE_RANK() OVER (
+                PARTITION BY
+                    department
+                ORDER BY salary DESC
+            ) AS salary_rank
+        FROM employees
+    ) AS RankedEmployees
+WHERE
+    salary_rank = 1;
