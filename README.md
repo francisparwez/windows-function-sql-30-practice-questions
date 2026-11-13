@@ -60,7 +60,8 @@ For each problem, think about three questions:
 |       15 | `RANK()` vs `DENSE_RANK()`                 | ✅ Completed   |
 |       16 | `RANK()` + `DENSE_RANK()` + `PARTITION BY` | ✅ Completed   |
 |       17 | `DENSE_RANK()` + `PARTITION BY`            | ✅ Completed   |
-|    18–24 | `LAG()` / `LEAD()`                         | ⬜ Not started |
+|       18 | `LAG()`                                    | ✅ Completed   |
+|    19–24 | `LAG()` / `LEAD()`                         | ⬜ Not started |
 |    25–29 | Running calculations                       | ⬜ Not started |
 |       30 | Multiple window functions                  | ⬜ Not started |
 
@@ -307,6 +308,18 @@ DENSE_RANK() OVER (
 The query uses a subquery named `RankedEmployees` to calculate each employee's salary rank within their department. `PARTITION BY department` restarts the ranking for each department, while `ORDER BY salary DESC` places the highest salaries first. The outer query filters to `salary_rank = 1`, returning every employee tied for the highest salary in each department.
 
 This solution uses `DENSE_RANK()` rather than the suggested `RANK()`. Both functions return the same rank-1 employees, including ties, so either function is valid for this task.
+
+#### ✅ Question 18 — Today's Sales vs Yesterday's Sales
+
+Used:
+
+```sql
+LAG(sales_amount, 1) OVER (
+    ORDER BY sales_date ASC
+) AS previous_day_sales
+```
+
+The query displays each day's sales alongside the sales amount from the preceding date. `LAG()` retrieves the value from the previous row in the window ordering, and `ORDER BY sales_date ASC` ensures that the preceding row is the earlier date. The first date has `NULL` because no earlier row is available.
 
 ### Additional Practice — Moving Average (Outside the 30 Questions)
 
@@ -1541,14 +1554,14 @@ USE WindowFunctionsPracticeDB;
 Current progress:
 
 ```text
-01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → ... → 30
-                                                                                  ↑
-                                                                                NEXT
+01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → ... → 30
+                                                                                       ↑
+                                                                                     NEXT
 ```
 
-**Completed: 17 / 30 beginner questions**
+**Completed: 18 / 30 beginner questions**
 
-Continue with **Question 18 — Today's Sales vs Yesterday's Sales**.
+Continue with **Question 19 — Daily Sales Change**.
 
 Try to solve every question yourself before checking a solution.
 
